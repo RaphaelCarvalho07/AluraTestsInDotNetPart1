@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Alura.Estacionamento.Modelos
 {
-    public class Veiculo
+    public class Veiculo /* : IEnumerable<object[ ]> */ //Interface não está funcionando.
     {
         //Campos    
         private string _placa;
@@ -83,7 +83,24 @@ namespace Alura.Estacionamento.Modelos
         {
             this.VelocidadeAtual -= (tempoSeg * 15);
         }
-               
+
+        // Código não está funcionando.
+       /* public IEnumerator<object[ ]> GetEnumerator()
+        {
+            yield return new object[ ]
+            {
+                new Veiculo
+                {
+                    Proprietario = "Raphilske Carvalho",
+                    Placa = "ASD-99999",
+                    Cor = "Verde",
+                    Modelo = "Fusca"
+                }
+            };
+        }
+
+        IEnumerator IEnumerable.GetEnumerator(); */
+
         //Construtor
         public Veiculo()
         {
