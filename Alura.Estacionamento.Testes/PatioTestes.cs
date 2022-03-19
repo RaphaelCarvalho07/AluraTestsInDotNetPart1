@@ -34,8 +34,8 @@ namespace Alura.Estacionamento.Testes
         }
 
         [Theory]
-        [InlineData( "Raphilske Carvalho", "ASD-1498", "preto", "Gol" )]
-        [InlineData( "Bina Carvalho", "ASD-1490", "preto", "Peugeot" )]
+        [InlineData( "Raphilske Carvalho", "ASD-1498", "Preto", "Gol" )]
+        [InlineData( "Bina Carvalho", "ASD-1490", "Preto", "Peugeot" )]
         [InlineData( "Kael Carvalho", "ASD-1430", "Amarelo", "Civic" )]
         [InlineData( "Isabela Carvalho", "ASD-1178", "Amarelo", "Porshe" )]
 
@@ -47,15 +47,37 @@ namespace Alura.Estacionamento.Testes
             veiculo.Proprietario = proprietario;
             veiculo.Placa = placa;
             veiculo.Cor = cor;
-            veiculo.Modelo=modelo;
-            estacionamento.RegistrarEntradaVeiculo(veiculo);
-            estacionamento.RegistrarSaidaVeiculo(placa);
+            veiculo.Modelo = modelo;
+            estacionamento.RegistrarEntradaVeiculo( veiculo );
+            estacionamento.RegistrarSaidaVeiculo( placa );
 
             // Act
             double faturamento = estacionamento.TotalFaturado();
 
             // Assert
-            Assert.Equal ( 2, faturamento );
+            Assert.Equal( 2, faturamento );
+        }
+
+        [Theory]
+        [InlineData( "Raphilske Carvalho", "ASD-1498", "Preto", "Gol" )]
+
+        public void LocalizaVeiculoNoPatio( string proprietario, string placa, string cor, string modelo )
+        {
+            // Arrange
+            var estacionamento = new Patio();
+            var veiculo = new Veiculo();
+
+            veiculo.Proprietario = proprietario;
+            veiculo.Placa = placa;
+            veiculo.Cor = cor;
+            veiculo.Modelo = modelo;
+            estacionamento.RegistrarEntradaVeiculo( veiculo );
+
+            // Act
+            var consultado = estacionamento.PesquisaVeiculo( placa );
+
+            // Assert
+            Assert.Equal( placa, consultado.Placa );
         }
     }
 }
