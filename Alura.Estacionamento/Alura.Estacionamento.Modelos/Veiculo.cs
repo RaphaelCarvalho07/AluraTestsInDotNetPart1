@@ -67,7 +67,18 @@ namespace Alura.Estacionamento.Modelos
         public string Modelo { get; set; }
         public string Proprietario
         {
-            get; set;
+            get
+            {
+                return _proprietario;
+            }
+            set
+            {
+                if (value.Length < 3)
+                {
+                    throw new System.FormatException( " Nome do proprietário deve ter no mínimo 3 caracteres." );
+                }
+                _proprietario = value;
+            }
         }
         public DateTime HoraEntrada { get; set; }
         public DateTime HoraSaida { get; set; }
@@ -122,7 +133,7 @@ namespace Alura.Estacionamento.Modelos
 
         public override string ToString()
         {
-            return  $"Ficha do Veículo:\n " +
+            return $"Ficha do Veículo:\n " +
                     $"Tipo do Veículo: { this.Tipo.ToString()}\n" +
                     $"Proprietário: {this.Proprietario}\n" +
                     $"Modelo: {this.Modelo}\n" +
