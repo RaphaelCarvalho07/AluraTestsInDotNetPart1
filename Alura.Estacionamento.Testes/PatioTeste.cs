@@ -2,130 +2,128 @@
 using Alura.Estacionamento.Modelos;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
-namespace Alura.Estacionamento.Testes
+namespace Alura.Estacionamento.Tests
 {
-    public class PatioTeste : IDisposable
+    public class PatioTeste
     {
-        private Veiculo veiculo;
-
-        public ITestOutputHelper SaidaConsoleTeste;
-        private Operador operador;
-        public PatioTeste( ITestOutputHelper _saidaConsoleTeste )
-        {
-            SaidaConsoleTeste = _saidaConsoleTeste;
-            SaidaConsoleTeste.WriteLine( "Construtor invocado." );
-            veiculo = new Veiculo();
-            operador = new Operador();
-            operador.Nome = "Kael";
-        }
-
         [Fact]
-        public void ValidaFaturamentoDoEstacionamentoComUmVeiculo()
+        public void ValidaFaturamentoDeSomenteUmVeiculoPatio()
         {
-            // Arrange
-            var estacionamento = new Patio();
+            //Arrange
+            Patio estacionamento = new Patio();
+            var operador = new Operador();
+            operador.Nome = "Operador Noturno";
             estacionamento.OperadorPatio = operador;
-            // var veiculo = new Veiculo();
-            veiculo.Proprietario = "Raphilske Carvalho";
-            veiculo.Tipo = TipoVeiculo.Motocicleta;
-            veiculo.Cor = "Verde";
-            veiculo.Modelo = "Fusca";
-            veiculo.Placa = "asd-9999";
 
+            var veiculo = new Veiculo();
+            veiculo.Proprietario = "André Silva";
+            veiculo.Tipo = TipoVeiculo.Automovel;
+            veiculo.Placa = "ABC-0101";
+            veiculo.Modelo = "Fusca";
+            veiculo.Acelerar( 10 );
+            veiculo.Frear( 5 );
             estacionamento.RegistrarEntradaVeiculo( veiculo );
             estacionamento.RegistrarSaidaVeiculo( veiculo.Placa );
 
-            // Act
+            //Act
             double faturamento = estacionamento.TotalFaturado();
 
-            // Assert
-            Assert.Equal( 1, faturamento );
-        }
-
-        [Theory]
-        [InlineData( "Raphilske Carvalho", "ASD-1498", "Preto", "Gol" )]
-        [InlineData( "Bina Carvalho", "ASD-1490", "Preto", "Peugeot" )]
-        [InlineData( "Kael Carvalho", "ASD-1430", "Amarelo", "Civic" )]
-        [InlineData( "Isabela Carvalho", "ASD-1178", "Amarelo", "Porshe" )]
-
-        public void ValidaFaturamentoDoEstacionamentoComVariosVeiculos( string proprietario, string placa, string cor, string modelo )
-        {
-            // Arrange
-            Patio estacionamento = new Patio();
-            estacionamento.OperadorPatio = operador;
-            // var veiculo = new Veiculo();
-            veiculo.Proprietario = proprietario;
-            veiculo.Placa = placa;
-            veiculo.Cor = cor;
-            veiculo.Modelo = modelo;
-            estacionamento.RegistrarEntradaVeiculo( veiculo );
-            estacionamento.RegistrarSaidaVeiculo( placa );
-
-            // Act
-            double faturamento = estacionamento.TotalFaturado();
-
-            // Assert
+            //Assert
             Assert.Equal( 2, faturamento );
         }
 
         [Theory]
-        [InlineData( "Raphilske Carvalho", "ASD-1498", "Preto", "Gol" )]
-
-        public void LocalizaVeiculoNoPatioComBaseNoIdTicket( string proprietario, string placa, string cor, string modelo )
+        [InlineData( "André Silva", "ASD-1498", "preto", "Gol" )]
+        [InlineData( "Jose Silva", "POL-9242", "Cinza", "Fusca" )]
+        [InlineData( "Maria Silva", "GDR-6524", "Azul", "Opala" )]
+        public void ValidaFaturamentoComVariosVeiculosNoPatio( string proprietario,
+                                                        string placa,
+                                                        string cor,
+                                                        string modelo )
         {
-            // Arrange
-            var estacionamento = new Patio();
+            //Arranje
+            Patio estacionamento = new Patio();
+            var operador = new Operador();
+            operador.Nome = "Operador Noturno";
             estacionamento.OperadorPatio = operador;
-            // var veiculo = new Veiculo();
 
+            var veiculo = new Veiculo();
             veiculo.Proprietario = proprietario;
             veiculo.Placa = placa;
             veiculo.Cor = cor;
             veiculo.Modelo = modelo;
+            veiculo.Acelerar( 10 );
+            veiculo.Frear( 5 );
             estacionamento.RegistrarEntradaVeiculo( veiculo );
+            estacionamento.RegistrarSaidaVeiculo( veiculo.Placa );
 
-            // Act
-            var consultado = estacionamento.PesquisaVeiculo( veiculo.IdTicket );
+            //Act
+            double faturamento = estacionamento.TotalFaturado();
 
-            // Assert
-            Assert.Contains( "### Ticket Estacionamento Alura ###", consultado.Ticket );
+            //Assert
+            Assert.Equal( 2, faturamento );
         }
 
-        [Fact]
-        public void AlterarDadosDoProprioVeiculo()
+        [Theory]
+        [InlineData( "André Silva", "ASD-1498", "preto", "Gol" )]
+        public void LocalizaVeiculoNoPatioComBaseNaPlaca( string proprietario,
+                                           string placa,
+                                           string cor,
+                                           string modelo )
         {
-            // Arrange
+            //Arrange
             Patio estacionamento = new Patio();
+            var operador = new Operador();
+            operador.Nome = "Operador Noturno";
             estacionamento.OperadorPatio = operador;
-            // var veiculo = new Veiculo();
-            veiculo.Proprietario = "Bina Carvalho";
-            veiculo.Placa = "ASD-1490";
-            veiculo.Cor = "Preto";
-            veiculo.Modelo = "Peugeot";
+            var veiculo = new Veiculo();
+            veiculo.Tipo = TipoVeiculo.Automovel;
+            veiculo.Proprietario = proprietario;
+            veiculo.Placa = placa;
+            veiculo.Cor = cor;
+            veiculo.Modelo = modelo;
+            veiculo.Acelerar( 10 );
+            veiculo.Frear( 5 );
             estacionamento.RegistrarEntradaVeiculo( veiculo );
 
-            var veiculoAlterado = new Veiculo();
-            veiculoAlterado.Proprietario = "Bina Carvalho";
-            veiculoAlterado.Placa = "ASD-1490";
-            veiculoAlterado.Cor = "Prata";
-            veiculoAlterado.Modelo = "Peugeot";
+            //Act
+            var consultado = estacionamento.PesquisaVeiculoPorPlaca( placa );
 
-            // Act
-            Veiculo alterado = estacionamento.AlterarDadosVeiculo( veiculoAlterado );
-
-            // Assert
-            Assert.Equal(alterado.Cor, veiculoAlterado.Cor );
+            //Assert
+            Assert.Equal( placa, consultado.Placa );
         }
 
-        public void Dispose()
+        [Theory]
+        [InlineData( "André Silva", "ASD-1498", "preto", "Gol" )]
+        public void LocalizaVeiculoNoPatioComBaseNoTicket( string proprietario,
+                                          string placa,
+                                          string cor,
+                                          string modelo )
         {
-            SaidaConsoleTeste.WriteLine( "Dispose invocado." );
+            //Arrange
+            Patio estacionamento = new Patio();
+            var operador = new Operador();
+            operador.Nome = "Operador Noturno";
+            estacionamento.OperadorPatio = operador;
+
+            var veiculo = new Veiculo();
+            veiculo.Tipo = TipoVeiculo.Automovel;
+            veiculo.Proprietario = proprietario;
+            veiculo.Placa = placa;
+            veiculo.Cor = cor;
+            veiculo.Modelo = modelo;
+            veiculo.Acelerar( 10 );
+            veiculo.Frear( 5 );
+            estacionamento.RegistrarEntradaVeiculo( veiculo );
+
+            //Act
+            var consultado = estacionamento.PesquisaVeiculoPorTicket( veiculo.IdTicket );
+
+            //Assert
+            Assert.Equal( placa, consultado.Placa );
         }
+
     }
 }

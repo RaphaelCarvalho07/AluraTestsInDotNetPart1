@@ -5,16 +5,15 @@ using System.Collections.Generic;
 
 namespace Alura.Estacionamento.Modelos
 {
-    public class Veiculo /* : IEnumerable<object[ ]> */ //Interface não está funcionando.
+    public class Veiculo
     {
-        //Campos    
+        //Campos
+        private string _ticket;
         private string _placa;
         private string _proprietario;
         private TipoVeiculo _tipo;
-        private string _ticket;
 
-        //Propriedades   
-
+        //Propriedades
         public string Placa
         {
             get
@@ -76,16 +75,17 @@ namespace Alura.Estacionamento.Modelos
             {
                 if (value.Length < 3)
                 {
-                    throw new System.FormatException( " Nome do proprietário deve ter no mínimo 3 caracteres." );
+                    throw new System.FormatException( " Nome de proprietário deve ter no mínimo 3 caracteres." );
                 }
                 _proprietario = value;
             }
+
         }
         public DateTime HoraEntrada { get; set; }
         public DateTime HoraSaida { get; set; }
-        public TipoVeiculo Tipo { get => _tipo; set => _tipo = value; }
-        public string IdTicket { get; set; }
         public string Ticket { get => _ticket; set => _ticket = value; }
+        public string IdTicket { get; set; }
+        public TipoVeiculo Tipo { get => _tipo; set => _tipo = value; }
 
         //Métodos
         public void Acelerar( int tempoSeg )
@@ -98,22 +98,24 @@ namespace Alura.Estacionamento.Modelos
             this.VelocidadeAtual -= (tempoSeg * 15);
         }
 
-        // Código não está funcionando.
-        /* public IEnumerator<object[ ]> GetEnumerator()
-         {
-             yield return new object[ ]
-             {
-                 new Veiculo
-                 {
-                     Proprietario = "Raphilske Carvalho",
-                     Placa = "ASD-99999",
-                     Cor = "Verde",
-                     Modelo = "Fusca"
-                 }
-             };
-         }
+        public void AlteraDadosVeiculo( Veiculo veiculoAlterado )
+        {
+            this.Proprietario = veiculoAlterado.Proprietario;
+            this.Modelo = veiculoAlterado.Modelo;
+            this.Largura = veiculoAlterado.Largura;
+            this.Cor = veiculoAlterado.Cor;
+        }
 
-         IEnumerator IEnumerable.GetEnumerator(); */
+        public override string ToString()
+        {
+            return $"Ficha do Veículo:\n " +
+                    $"Tipo do Veículo: {this.Tipo.ToString()}\n " +
+                    $"Proprietário: {this.Proprietario}\n" +
+                    $"Modelo: {this.Modelo}\n" +
+                    $"Cor: {this.Cor}\n" +
+                    $"Placa: {this.Placa}\n";
+
+        }
 
         //Construtor
         public Veiculo()
@@ -126,22 +128,7 @@ namespace Alura.Estacionamento.Modelos
             Proprietario = proprietario;
         }
 
-        public void AlterarDados( Veiculo veiculoAlterado )
-        {
-            this.Proprietario = veiculoAlterado.Proprietario;
-            this.Modelo = veiculoAlterado.Modelo;
-            this.Placa = veiculoAlterado.Placa;
-            this.Cor = veiculoAlterado.Cor;
-        }
 
-        public override string ToString()
-        {
-            return $"Ficha do Veículo:\n " +
-                    $"Tipo do Veículo: { this.Tipo.ToString()}\n" +
-                    $"Proprietário: {this.Proprietario}\n" +
-                    $"Modelo: {this.Modelo}\n" +
-                    $"Cor: {this.Cor}" +
-                    $"Placa: {this.Placa}";
-        }
+
     }
 }
